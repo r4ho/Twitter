@@ -1,0 +1,10 @@
+doctype html
+html(lang="en")
+    head
+        title Tweet! 
+        link(rel='stylesheet',href='"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"')
+    body    
+          form(action='/newtweet', method='post')
+            label Please enter your tweet:
+            input(type='text', name='tweet')
+            button(type='submit') Submit

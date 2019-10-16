@@ -1,0 +1,13 @@
+doctype html
+html(lang="en")
+    head
+        title Tweet Sent!
+        link(rel='stylesheet',href='"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"')
+    body    
+        form(action = "/", method= 'get')
+            button(type='submit') Home 
+        h2  Tweet was created! 
+        a(href='https://twitter.com/KandasamyRamya') Please check to see your tweet!
+        p Tweet verbiage and ID is: 
+        p= data
+        p= id

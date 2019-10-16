@@ -1,0 +1,13 @@
+doctype html
+html(lang="en")
+    head
+        title Tweet! 
+        link(rel='stylesheet',href='"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"')
+    body    
+            h1 Twitter Application
+            form(action='/createtweet', method='get')
+                button(type='submit') Post Tweet
+            form(action='/deletetweet', method='get')
+                button(type='submit') Delete Tweet
+            form(action='/gettweet', method='get')
+                button(type='submit') Get Tweet
