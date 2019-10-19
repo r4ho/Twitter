@@ -3,10 +3,10 @@ const router = express.Router();
 
 const Twit = require("twit");
 const T = new Twit({
-  consumer_key: "",
-  consumer_secret: "",
-  access_token: "",
-  access_token_secret: "",
+  consumer_key: '',
+  consumer_secret: '',
+  access_token: '',
+  access_token_secret: '',
   timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
   strictSSL: true // optional - requires SSL certificates to be valid.
 });
@@ -27,8 +27,12 @@ router.post("/gettweet", function(req, res) {
   var id = { id: req.body.tweet };
   var tweet;
   T.get("statuses/show/:id", id, function(err, data, response) {
-    tweet = JSON.stringify(data.text);
+    tweet = data.text;
     console.log(tweet);
+    if(err) { 
+      res.render('tweetdeleted', err)
+    }
+    else
     res.render("tweetretrieved", {
       tweet: tweet,
       id: req.body.tweet
@@ -44,7 +48,10 @@ router.post("/deletetweet", function(req, res) {
   console.dir(req.body.tweet);
   var id = { id: req.body.tweet };
   T.post("statuses/destroy/:id", id, function(err, data, response) {
-    res.render("tweetdeleted", id);
+    if(err) { 
+      res.render('tweetdeleted', err)
+    }
+    else res.render("tweetdeleted", id);
   });
 });
 
@@ -53,7 +60,7 @@ router.post("/newtweet", function(req, res) {
   console.log(req.body.toString()); // this is the tweet message
   T.post(
     "statuses/update",
-    { status: JSON.stringify(req.body.tweet) },
+    { status: req.body.tweet },
     (err, data, response) => {
       if (err) console.log(err);
       else {

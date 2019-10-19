@@ -6,7 +6,10 @@ html(lang="en")
     body    
         form(action = "/", method= 'get')
             button(type='submit') Home 
-        h2 Tweet Retrieved 
-        p Tweet verbiage and ID is:
-        p= tweet
-        h1= id 
+        if id
+            h2 Tweet Retrieved 
+            p Tweet verbiage and ID is:
+            p= tweet
+            h1= id 
+        else
+            h2 Error With Id

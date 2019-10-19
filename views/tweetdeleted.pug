@@ -6,7 +6,11 @@ html(lang="en")
     body    
         form(action = "/", method= 'get')
             button(type='submit') Home 
-        h2  Tweet was deleted!
-        a(href='https://twitter.com/KandasamyRamya') Please check to make sure the tweet was deleted!
-        p Tweet ID was: 
-        p= id
+        if id
+            h2  Tweet was deleted!
+            a(href='https://twitter.com/KandasamyRamya') Please check to make sure the tweet was deleted!
+            p Tweet ID was: 
+            p= id
+        else
+            h2 Error With Id
+            p=err
