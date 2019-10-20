@@ -3,10 +3,10 @@ const router = express.Router();
 
 const Twit = require("twit");
 const T = new Twit({
-  consumer_key: 'LvmxJs1Q6YVpvVOVVHf8YVyeE' ,
-  consumer_secret: 'aOjbBKV1zpsia2zsTzjMUMDYM9fGfbUG24FoNkB5I2FkcJksZO',
-  access_token: '1178199351169961989-Rp2tfBtq53wUMFs4JdvrIOJlF8HR0I',
-  access_token_secret: 'jLpy9QNQdiN9vcPxgT3VwlGxkDkJg8kUuUt3CqkSAkBtM',
+  consumer_key: '' ,
+  consumer_secret: '',
+  access_token: '',
+  access_token_secret: '',
   timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
   strictSSL: true // optional - requires SSL certificates to be valid.
 });
