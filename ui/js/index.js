@@ -1,11 +1,15 @@
-
+/*
+ *Initializes the UI containers and its contents
+ * */
 function initUI() {
 	renderModalContainers();
 	renderMainContainers();
 	renderTitleBar();
 	renderControllers();
 }
-
+/*
+ *Render Main containers with titles and labels
+ * */
 function renderMainContainers() {
 	$('#root').append(
 		"<div class='container' style='margin-top: 30px;'>"
@@ -36,7 +40,9 @@ function renderMainContainers() {
 		+"</div>"
 	);
 }
-
+/*
+ *Adds title to #title_bar
+ * */
 function renderTitleBar() {
 	$('#title_bar').append(
 		"<h2>"
@@ -47,7 +53,9 @@ function renderTitleBar() {
 		+"<p>Group: Cereal Killers</p>"
 	);
 }
-
+/*
+ * Adds buttons for Twitter API demo POST, GET, and DELETE to #controllers
+ * */
 function renderControllers() {
 	$('#controllers').append(
 		"<div class='container-fluid'>"
@@ -79,7 +87,10 @@ function renderControllers() {
 		+"</div>"
 	);
 }
-
+/*
+ *Render blank modal for use later when buttons are pressed.
+ *Initializes as hidden.
+ * */
 function renderModalContainers() {
 	$('#root').append(
 		"<div class='modal fade' id='my_modal' tabindex='-1' role='dialog' aria-labelledby='my_modal_label' aria-hidden='true'>"
@@ -101,15 +112,19 @@ function renderModalContainers() {
 		+"</div>"
 	);
 }
-
+/*
+ *Delete contents of modal for use of other functions
+ * */
 function clearModalContents() {
 	$('#my_modal_label').empty();
 	$('#my_modal_body').empty();
 	$('#my_modal_footer').empty();
 }
-
+/*
+ *Render the form for posting tweets on to the modal window.
+ * */
 function renderPostForm() {
-	clearModalContents();
+	clearModalContents(); //Clear modal first of stale data.
 	$('#my_modal_label').append("Post A Tweet");
 	$('#my_modal_body').append(
 		"<div class='form-group'>"
@@ -125,9 +140,11 @@ function renderPostForm() {
 	);
 
 }
-
+/*
+ *Render the form for reading tweets on to the modal window.
+ * */
 function renderGetForm() {
-	clearModalContents();
+	clearModalContents(); //Clear modal first of stale data.
 	$('#my_modal_label').append("Read A Tweet");
 	$('#my_modal_body').append(
 		"<div class='form-group'>"
@@ -142,9 +159,11 @@ function renderGetForm() {
 		+"<button type='button' class='btn btn-danger' data-dismiss='modal'>Close</button>"
 	);
 }
-
+/*
+ *Render the form for deleting tweets on to the modal window.
+ * */
 function renderDeleteForm() {
-	clearModalContents();
+	clearModalContents(); //Clear modal first of stale data.
 	$('#my_modal_label').append("Delete A Tweet");
 	$('#my_modal_body').append(
 		"<div class='form-group'>"
@@ -159,7 +178,9 @@ function renderDeleteForm() {
 		+"<button type='button' class='btn btn-danger' data-dismiss='modal'>Close</button>"
 	);
 }
-
+/*
+ *Make a POST request to local API with content of textarea as value. 
+ * */
 function postTweet() {
 	let tweet = document.getElementById('tweetTextArea').value;
 
@@ -178,7 +199,9 @@ function postTweet() {
 	});
 
 }
-
+/*
+ *Make a GET request to local API with id_str as value from Twitter response.
+ * */
 function getTweet() {
 	let tweet_id = document.getElementById('tweetGet').value;
 
@@ -195,7 +218,9 @@ function getTweet() {
 		}
 	});
 }
-
+/*
+ *Make a POST request to local API with id_str as value from Twitter response.
+ * */
 function deleteTweet() {
 	let tweet_id = document.getElementById('tweetDelete').value;
 
@@ -213,7 +238,10 @@ function deleteTweet() {
 		}
 	});
 }
-
+/*
+ *Update reponse display window with relevant messages, link to the Tweet and
+ *stringified JSON response from Twitter.
+ * */
 function updateResponseDisplay(res, method) {
 	let msg;
 	switch(method) {
