@@ -3,10 +3,10 @@ const router = express.Router();
 
 const Twit = require("twit");
 const T = new Twit({
-  consumer_key: '',
-  consumer_secret: '',
-  access_token: '',
-  access_token_secret: '',
+  consumer_key: 'LvmxJs1Q6YVpvVOVVHf8YVyeE' ,
+  consumer_secret: 'aOjbBKV1zpsia2zsTzjMUMDYM9fGfbUG24FoNkB5I2FkcJksZO',
+  access_token: '1178199351169961989-Rp2tfBtq53wUMFs4JdvrIOJlF8HR0I',
+  access_token_secret: 'jLpy9QNQdiN9vcPxgT3VwlGxkDkJg8kUuUt3CqkSAkBtM',
   timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
   strictSSL: true // optional - requires SSL certificates to be valid.
 });
@@ -25,18 +25,12 @@ router.get("/gettweet", function(req, res) {
 
 router.post("/gettweet", function(req, res) {
   var id = { id: req.body.tweet };
-  var tweet;
   T.get("statuses/show/:id", id, function(err, data, response) {
-    tweet = data.text;
-    console.log(tweet);
     if(err) { 
-      res.render('tweetdeleted', err)
+      res.send(err);
+    } else {
+      res.json(data);
     }
-    else
-    res.render("tweetretrieved", {
-      tweet: tweet,
-      id: req.body.tweet
-    });
   });
 });
 
@@ -45,27 +39,25 @@ router.get("/deletetweet", function(req, res) {
 });
 
 router.post("/deletetweet", function(req, res) {
-  console.dir(req.body.tweet);
   var id = { id: req.body.tweet };
   T.post("statuses/destroy/:id", id, function(err, data, response) {
     if(err) { 
-      res.render('tweetdeleted', err)
+      res.send(err);
+    } else { 
+      res.json(data);
     }
-    else res.render("tweetdeleted", id);
   });
 });
 
 router.post("/newtweet", function(req, res) {
-  console.dir(req.body);
-  console.log(req.body.toString()); // this is the tweet message
   T.post(
     "statuses/update",
     { status: req.body.tweet },
-    (err, data, response) => {
-      if (err) console.log(err);
-      else {
-        console.log(data);
-        res.render("tweetsent", { data: req.body.tweet, id: data.id_str });
+    function(err, data, response) {
+      if (err) { 
+	    res.send(err);
+      } else {
+	res.json(data);
       }
     }
   );
