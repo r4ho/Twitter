@@ -14,7 +14,8 @@ chai.use(chaiHttp);
                 .send({"tweet": "test1"})
                 .end((err,res)=>{
                     res.should.have.status(200);
-                    global_id =res['text'].slice(res['text'].lastIndexOf("<p>") + 3, res['text'].lastIndexOf("</p>"))
+                    var a = JSON.parse(res.text);
+                    global_id = a.id_str;
                     done()
                 })
         })
@@ -28,8 +29,8 @@ chai.use(chaiHttp);
                 .send({"tweet": global_id})
                 .end((err,res)=>{
                     res.should.have.status(200);
-                    console.log("####" + res.text);
-                    var message = res['text'].slice(res['text'].lastIndexOf("<p>") + 3, res['text'].lastIndexOf("</p>"))
+                    var a = JSON.parse(res.text);
+                    var message = a.text
                     chai.assert.equal(message, 'test1')
                     done()
                 })
@@ -43,8 +44,9 @@ chai.use(chaiHttp);
                 .post("/gettweet/")
                 .send({"tweet": 'fake_id'})
                 .end((err,res)=>{
-                    var hasError = res['text'].slice(res['text'].lastIndexOf("<h2>") + 4, res['text'].lastIndexOf("</h2>"))
-                    chai.assert.equal(hasError, "Error With Id");
+                    var a = JSON.parse(res.text)
+                    var hasError = a.code
+                    chai.assert.equal(hasError, 34);
                     done()
                 })
         })
@@ -57,8 +59,9 @@ chai.use(chaiHttp);
                 .post("/deletetweet/")
                 .send({"tweet": global_id})
                 .end((err,res)=>{
-                    var hasError = res['text'].slice(res['text'].lastIndexOf("<h2>") + 4, res['text'].lastIndexOf("</h2>"))
-                    chai.assert.equal(hasError, " Tweet was deleted!")
+                    var a = JSON.parse(res.text)
+                    var hasError = a.code
+                    chai.assert.equal(hasError, undefined);
                     done()
                 })
         });
@@ -70,8 +73,9 @@ chai.use(chaiHttp);
                 .post("/deletetweet/")
                 .send({"tweet": 'fake_id'})
                 .end((err,res)=>{
-                    var hasError = res['text'].slice(res['text'].lastIndexOf("<h2>") + 4, res['text'].lastIndexOf("</h2>"))
-                    chai.assert.equal(hasError, "Error With Id");
+                    var a = JSON.parse(res.text)
+                    var hasError = a.code
+                    chai.assert.equal(hasError, 34);
                     done()
                 })
         });
@@ -85,7 +89,8 @@ chai.use(chaiHttp);
                 .send({"tweet": "test2"})
                 .end((err,res)=>{
                     res.should.have.status(200);
-                    id =res['text'].slice(res['text'].lastIndexOf("<p>") + 3, res['text'].lastIndexOf("</p>"))
+                    var a = JSON.parse(res.text);
+                    id = a.id_str;
                     done()
                 })
             
@@ -96,6 +101,9 @@ chai.use(chaiHttp);
                 .send({"tweet": id})
                 .end((err,res)=>{
                     res.should.have.status(200);
+                    var a = JSON.parse(res.text)
+                    var hasError = a.code
+                    chai.assert.equal(hasError, undefined);
                     done()
                 })
         });
@@ -109,7 +117,8 @@ chai.use(chaiHttp);
                 .send({"tweet": "test3"})
                 .end((err,res)=>{
                     res.should.have.status(200);
-                    id =res['text'].slice(res['text'].lastIndexOf("<p>") + 3, res['text'].lastIndexOf("</p>"))
+                    var a = JSON.parse(res.text);
+                    id = a.id_str;
                     done()
                 })
             
@@ -120,7 +129,8 @@ chai.use(chaiHttp);
                 .send({"tweet": id})
                 .end((err,res)=>{
                     res.should.have.status(200);
-                    var message = res['text'].slice(res['text'].lastIndexOf("<p>") + 3, res['text'].lastIndexOf("</p>"))
+                    var a = JSON.parse(res.text);
+                    var message = a.text
                     chai.assert.equal(message, 'test3')
                     done()
                 })
@@ -132,7 +142,64 @@ chai.use(chaiHttp);
                 .send({"tweet": id})
                 .end((err,res)=>{
                     res.should.have.status(200);
+                    var a = JSON.parse(res.text)
+                    var hasError = a.code
+                    chai.assert.equal(hasError, undefined);
                     done()
                 })
+        });
+    })
+
+    describe ("CREATE ONE AND READ ONE AND DELETE ONE AND READ FAIL AFTER", function(){
+        var id = 0;
+        it("should create a tweet", done=>{
+            chai.request("http://localhost:8000")
+                .post("/newtweet/")
+                .send({"tweet": "test3"})
+                .end((err,res)=>{
+                    res.should.have.status(200);
+                    var a = JSON.parse(res.text);
+                    id = a.id_str;
+                    done()
+                })
+            
+        });
+        it("should read a tweet", done=>{
+            chai.request("http://localhost:8000")
+                .post("/gettweet/")
+                .send({"tweet": id})
+                .end((err,res)=>{
+                    res.should.have.status(200);
+                    var a = JSON.parse(res.text);
+                    var message = a.text
+                    chai.assert.equal(message, 'test3')
+                    done()
+                })
+            
+        });
+        it("then delete it", done=>{
+            chai.request("http://localhost:8000")
+                .post("/deletetweet/")
+                .send({"tweet": id})
+                .end((err,res)=>{
+                    res.should.have.status(200);
+                    var a = JSON.parse(res.text)
+                    var hasError = a.code
+                    chai.assert.equal(hasError, undefined);
+                    done()
+                })
+        });
+        it("should read and fail", done=>{
+            chai.request("http://localhost:8000")
+                .post("/gettweet/")
+                .send({"tweet": id})
+                .end((err,res)=>{
+                    res.should.have.status(200);
+                    var a = JSON.parse(res.text)
+                    var hasError = a.code
+                    chai.assert.equal(hasError, 144);
+                    done()
+                })
+            
         });
     })
